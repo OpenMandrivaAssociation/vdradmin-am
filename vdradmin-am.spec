@@ -14,6 +14,7 @@ Source:		http://andreas.vdr-developer.org/download/%name-%version.tar.bz2
 Source2:	vdradmin.init
 Source3:	vdradmin.sysconfig
 Source4:	vdradmin.logrotate
+BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
 BuildRequires:	perl(CGI)
 BuildRequires:	perl(Locale::gettext)
