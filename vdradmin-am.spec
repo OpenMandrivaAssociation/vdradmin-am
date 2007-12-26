@@ -1,7 +1,7 @@
 
 %define name	vdradmin-am
 %define version	3.5.3
-%define rel	1
+%define rel	2
 
 Summary:	Web interface for VDR
 Name:		%name
@@ -40,7 +40,9 @@ sed -i -e '/^$CONFIG{VDRCONFDIR}\s*=\s*".*";/s,".*","%{_vdr_cfgdir}",' vdradmind
 sed -i -e '/^$CONFIG{VDRVFAT}\s*=\s*[01];/s,[01],0,' vdradmind.pl
 sed -i -e '/^my $SEARCH_FILES_IN_SYSTEM\s*=\s*[01];/s,[01],1,' vdradmind.pl
 
+sed -i -e "/COMPILE_DIR\s*=>\s*'.*',/s,'.*','$(pwd)'," vdradmind.pl
 ./vdradmind.pl --cfgdir . --config < /dev/null
+sed -i -e "/COMPILE_DIR\s*=>\s*'.*',/s,'.*','%{_var}/cache/vdradmin'," vdradmind.pl
 
 cat > README.install.urpmi <<EOF
 Use "vdradmind.pl --config" to configure the credentials and the tcp port.
@@ -77,6 +79,8 @@ install -d -m755 %{buildroot}%{_logdir}/vdradmin
 install -d -m755 %{buildroot}%{_sysconfdir}/logrotate.d
 install -m644 %SOURCE4 %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
+install -d -m755 %{buildroot}%{_var}/cache/vdradmin
+
 %find_lang vdradmin
 
 %clean
@@ -96,6 +100,7 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %attr(-,vdr,vdr) %dir %{_localstatedir}/vdradmin
 %attr(-,vdr,vdr) %dir %{_logdir}/vdradmin
+%attr(-,vdr,vdr) %dir %{_var}/cache/vdradmin
 %attr(0640,vdr,vdr) %config(noreplace) %{_localstatedir}/vdradmin/vdradmind.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/vdradmin
 %{_initrddir}/vdradmin
