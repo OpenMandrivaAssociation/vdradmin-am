@@ -1,7 +1,7 @@
 
 %define name	vdradmin-am
-%define version	3.5.3
-%define rel	2
+%define version	3.6.1
+%define rel	1
 
 Summary:	Web interface for VDR
 Name:		%name
