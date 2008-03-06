@@ -1,7 +1,7 @@
 
 %define name	vdradmin-am
 %define version	3.6.1
-%define rel	1
+%define rel	2
 
 Summary:	Web interface for VDR
 Name:		%name
@@ -22,6 +22,7 @@ BuildRequires:	vdr-devel
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
 Requires:	vdr-common
+Requires:	perl(Template::Plugin::JavaScript)
 Provides:	vdradmin
 
 %description
