@@ -9,7 +9,7 @@ Version:	%version
 Release:	%mkrel %rel
 Group:		Video
 License:	GPL
-URL:		http://andreas.vdr-developer.org/en/
+URL:		http://andreas.vdr-developer.org/vdradmin-am/
 Source:		http://andreas.vdr-developer.org/download/%name-%version.tar.bz2
 Source2:	vdradmin.init
 Source3:	vdradmin.sysconfig
