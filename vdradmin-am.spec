@@ -58,9 +58,9 @@ install -d -m755 %{buildroot}%{_bindir}
 install -m755 *.pl %{buildroot}%{_bindir}
 
 install -d -m755 %{buildroot}%{_sysconfdir}
-install -d -m755 %{buildroot}%{_localstatedir}/vdradmin
-install -m644 vdradmind.conf %{buildroot}%{_localstatedir}/vdradmin
-ln -s %{_localstatedir}/vdradmin %{buildroot}%{_sysconfdir}/vdradmin
+install -d -m755 %{buildroot}%{_localstatedir}/lib/vdradmin
+install -m644 vdradmind.conf %{buildroot}%{_localstatedir}/lib/vdradmin
+ln -s %{_localstatedir}/lib/vdradmin %{buildroot}%{_sysconfdir}/vdradmin
 
 install -d -m755 %{buildroot}%{_sysconfdir}/sysconfig
 install -m644 %SOURCE3 %{buildroot}%{_sysconfdir}/sysconfig/vdradmin
@@ -99,10 +99,10 @@ rm -rf %{buildroot}
 %doc README.install.urpmi
 %{_sysconfdir}/vdradmin
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%attr(-,vdr,vdr) %dir %{_localstatedir}/vdradmin
+%attr(-,vdr,vdr) %dir %{_localstatedir}/lib/vdradmin
 %attr(-,vdr,vdr) %dir %{_logdir}/vdradmin
 %attr(-,vdr,vdr) %dir %{_var}/cache/vdradmin
-%attr(0640,vdr,vdr) %config(noreplace) %{_localstatedir}/vdradmin/vdradmind.conf
+%attr(0640,vdr,vdr) %config(noreplace) %{_localstatedir}/lib/vdradmin/vdradmind.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/vdradmin
 %{_initrddir}/vdradmin
 %{_bindir}/vdradmind.pl
