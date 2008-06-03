@@ -3,6 +3,9 @@
 %define version	3.6.1
 %define rel	2
 
+# backportability
+%define _localstatedir %{_var}
+
 Summary:	Web interface for VDR
 Name:		%name
 Version:	%version
