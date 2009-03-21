@@ -1,7 +1,7 @@
 
 %define name	vdradmin-am
-%define version	3.6.1
-%define rel	2
+%define version	3.6.4
+%define rel	1
 
 # backportability
 %define _localstatedir %{_var}
@@ -36,12 +36,15 @@ specific programs automatically.
 %prep
 %setup -q
 
+# Why separate UTF-8 files? Anyway, rename as per standard
+rename utf8 UTF-8 po/*utf8* locale/*utf8*
+
 # Setup default config
 sed -i -e '/^$CONFIG{LOGFILE}\s*=\s*".*";/s,".*","vdradmin/vdradmind.log",' vdradmind.pl
 #sed -i -e '/^$CONFIG{LOCAL_NET}\s*=\s*".*";/s,".*","127.0.0.1/32",' vdradmind.pl
 sed -i -e '/^$CONFIG{VIDEODIR}\s*=\s*".*";/s,".*","%{_vdr_videodir}",' vdradmind.pl
 sed -i -e '/^$CONFIG{VDRCONFDIR}\s*=\s*".*";/s,".*","%{_vdr_cfgdir}",' vdradmind.pl
-sed -i -e '/^$CONFIG{VDRVFAT}\s*=\s*[01];/s,[01],0,' vdradmind.pl
+#sed -i -e '/^$CONFIG{VDRVFAT}\s*=\s*[01];/s,[01],0,' vdradmind.pl
 sed -i -e '/^my $SEARCH_FILES_IN_SYSTEM\s*=\s*[01];/s,[01],1,' vdradmind.pl
 
 sed -i -e "/COMPILE_DIR\s*=>\s*'.*',/s,'.*','$(pwd)'," vdradmind.pl
@@ -58,6 +61,7 @@ chmod a+r README*
 rm -rf %{buildroot}
 
 install -d -m755 %{buildroot}%{_bindir}
+install -m755 vdradmind %{buildroot}%{_bindir}
 install -m755 *.pl %{buildroot}%{_bindir}
 
 install -d -m755 %{buildroot}%{_sysconfdir}
@@ -108,6 +112,7 @@ rm -rf %{buildroot}
 %attr(0640,vdr,vdr) %config(noreplace) %{_localstatedir}/lib/vdradmin/vdradmind.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/vdradmin
 %{_initrddir}/vdradmin
+%{_bindir}/vdradmind
 %{_bindir}/vdradmind.pl
 %{_bindir}/convert.pl
 %{_bindir}/autotimer2searchtimer.pl
