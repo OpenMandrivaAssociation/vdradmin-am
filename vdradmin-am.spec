@@ -1,7 +1,7 @@
 
 %define name	vdradmin-am
 %define version	3.6.4
-%define rel	1
+%define rel	2
 
 # backportability
 %define _localstatedir %{_var}
@@ -17,11 +17,13 @@ Source:		http://andreas.vdr-developer.org/download/%name-%version.tar.bz2
 Source2:	vdradmin.init
 Source3:	vdradmin.sysconfig
 Source4:	vdradmin.logrotate
+Patch0:		vdradmin-am-workaround-perl-bug.patch
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
 BuildRequires:	perl(CGI)
 BuildRequires:	perl(Locale::gettext)
 BuildRequires:	vdr-devel
+BuildRequires:	gettext
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
 Requires:	vdr-common
@@ -35,9 +37,15 @@ specific programs automatically.
 
 %prep
 %setup -q
+%patch0 -p1
 
-# Why separate UTF-8 files? Anyway, rename as per standard
-rename utf8 UTF-8 po/*utf8* locale/*utf8*
+# There really should not be separate UTF-8 files, but vdradmin is probably
+# relying on them to determine whether filenames of recordings are UTF-8 to
+# present them correctly to the web browser (the charset in html header).
+# Correct way would be to use environment variables or the configuration file
+# for this.
+rename utf8 UTF-8 po/*utf8*
+rm -rf locale/*
 
 # Setup default config
 sed -i -e '/^$CONFIG{LOGFILE}\s*=\s*".*";/s,".*","vdradmin/vdradmind.log",' vdradmind.pl
@@ -57,11 +65,15 @@ EOF
 
 chmod a+r README*
 
+%build
+./make.sh po
+
 %install
 rm -rf %{buildroot}
 
 install -d -m755 %{buildroot}%{_bindir}
-install -m755 vdradmind %{buildroot}%{_bindir}
+# symlink
+cp -a vdradmind %{buildroot}%{_bindir}
 install -m755 *.pl %{buildroot}%{_bindir}
 
 install -d -m755 %{buildroot}%{_sysconfdir}
@@ -90,6 +102,9 @@ install -m644 %SOURCE4 %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 install -d -m755 %{buildroot}%{_var}/cache/vdradmin
 
 %find_lang vdradmin
+
+# having encoding in %lang does not work correctly
+sed -i 's,\.UTF-8),),' vdradmin.lang
 
 %clean
 rm -rf %{buildroot}
