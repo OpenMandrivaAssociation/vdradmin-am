@@ -22,6 +22,7 @@ BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
 BuildRequires:	perl(CGI)
 BuildRequires:	perl(Locale::gettext)
+BuildRequires:	perl(HTTP::Date)
 BuildRequires:	vdr-devel
 BuildRequires:	gettext
 Requires(post):	rpm-helper
