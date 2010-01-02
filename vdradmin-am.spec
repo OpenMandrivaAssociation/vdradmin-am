@@ -1,7 +1,7 @@
 
 %define name	vdradmin-am
-%define version	3.6.4
-%define rel	2
+%define version	3.6.5
+%define rel	1
 
 # backportability
 %define _localstatedir %{_var}
