@@ -1,6 +1,6 @@
 
 %define name	vdradmin-am
-%define version	3.6.5
+%define version	3.6.7
 %define rel	1
 
 # backportability
@@ -16,8 +16,15 @@ URL:		http://andreas.vdr-developer.org/vdradmin-am/
 Source:		http://andreas.vdr-developer.org/download/%name-%version.tar.bz2
 Source2:	vdradmin.init
 Source3:	vdradmin.sysconfig
-Source4:	vdradmin.logrotate
+# https://qa.mandriva.com/show_bug.cgi?id=52396
+# We should probably use "use open ':locale';", but it doesn't seem to
+# work if we do that, TODO: investigate
 Patch0:		vdradmin-am-workaround-perl-bug.patch
+# we use syslog now, no logdir needed
+Patch1:		vdradmin-am-no-logdir-needed.patch
+# allow pidfile in non-writable directory (we precreate the file with good perms),
+# allow start with empty pidfile
+Patch2:		vdradmin-am-pidfile.patch
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildArch:	noarch
 BuildRequires:	perl(CGI)
@@ -29,6 +36,7 @@ Requires(post):	rpm-helper
 Requires(preun): rpm-helper
 Requires:	vdr-common
 Requires:	perl(Template::Plugin::JavaScript)
+Requires:	perl(Sys::Syslog)
 Provides:	vdradmin
 
 %description
@@ -38,27 +46,20 @@ specific programs automatically.
 
 %prep
 %setup -q
-%patch0 -p1
+%apply_patches
 
-# There really should not be separate UTF-8 files, but vdradmin is probably
-# relying on them to determine whether filenames of recordings are UTF-8 to
-# present them correctly to the web browser (the charset in html header).
-# Correct way would be to use environment variables or the configuration file
-# for this.
-rename utf8 UTF-8 po/*utf8*
 rm -rf locale/*
 
 # Setup default config
-sed -i -e '/^$CONFIG{LOGFILE}\s*=\s*".*";/s,".*","vdradmin/vdradmind.log",' vdradmind.pl
+# Now using syslog: sed -i -e '/^$CONFIG{LOGFILE}\s*=\s*".*";/s,".*","vdradmin/vdradmind.log",' vdradmind.pl
 #sed -i -e '/^$CONFIG{LOCAL_NET}\s*=\s*".*";/s,".*","127.0.0.1/32",' vdradmind.pl
 sed -i -e '/^$CONFIG{VIDEODIR}\s*=\s*".*";/s,".*","%{_vdr_videodir}",' vdradmind.pl
 sed -i -e '/^$CONFIG{VDRCONFDIR}\s*=\s*".*";/s,".*","%{_vdr_cfgdir}",' vdradmind.pl
 #sed -i -e '/^$CONFIG{VDRVFAT}\s*=\s*[01];/s,[01],0,' vdradmind.pl
+sed -i -e '/^\s*$PIDFILE\s*=\s*".*";/s,".*","%{_var}/run/vdradmind.pid",' vdradmind.pl
 sed -i -e '/^my $SEARCH_FILES_IN_SYSTEM\s*=\s*[01];/s,[01],1,' vdradmind.pl
 
-sed -i -e "/COMPILE_DIR\s*=>\s*'.*',/s,'.*','$(pwd)'," vdradmind.pl
 ./vdradmind.pl --cfgdir . --config < /dev/null
-sed -i -e "/COMPILE_DIR\s*=>\s*'.*',/s,'.*','%{_var}/cache/vdradmin'," vdradmind.pl
 
 cat > README.install.urpmi <<EOF
 Use "vdradmind.pl --config" to configure the credentials and the tcp port.
@@ -95,11 +96,6 @@ cp -a locale %{buildroot}%{_datadir}
 install -d -m755 %{buildroot}%{_initrddir}
 install -m755 %SOURCE2 %{buildroot}%{_initrddir}/vdradmin
 
-install -d -m755 %{buildroot}%{_logdir}/vdradmin
-
-install -d -m755 %{buildroot}%{_sysconfdir}/logrotate.d
-install -m644 %SOURCE4 %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
-
 install -d -m755 %{buildroot}%{_var}/cache/vdradmin
 
 %find_lang vdradmin
@@ -121,10 +117,9 @@ rm -rf %{buildroot}
 %doc CREDITS FAQ HISTORY INSTALL README.* contrib
 %doc README.install.urpmi
 %{_sysconfdir}/vdradmin
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %attr(-,vdr,vdr) %dir %{_localstatedir}/lib/vdradmin
-%attr(-,vdr,vdr) %dir %{_logdir}/vdradmin
 %attr(-,vdr,vdr) %dir %{_var}/cache/vdradmin
+
 %attr(0640,vdr,vdr) %config(noreplace) %{_localstatedir}/lib/vdradmin/vdradmind.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/vdradmin
 %{_initrddir}/vdradmin
