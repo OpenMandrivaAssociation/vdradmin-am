@@ -1,0 +1,13 @@
+Index: vdradmin-am-3.6.4/vdradmind.pl
+===================================================================
+--- vdradmin-am-3.6.4/vdradmind.pl
++++ vdradmin-am-3.6.4/vdradmind.pl	2009-07-22 13:56:54.012092519 +0300
+@@ -3286,7 +3286,7 @@
+     else {
+         chomp($MY_ENCODING = `locale charmap`);
+     }
+-    bind_textdomain_codeset("vdradmin", $MY_ENCODING) if($can_use_bind_textdomain_codeset);
++    bind_textdomain_codeset("vdradmin", lc($MY_ENCODING)) if($can_use_bind_textdomain_codeset);
+     CGI::charset($MY_ENCODING);
+ }
+ 
