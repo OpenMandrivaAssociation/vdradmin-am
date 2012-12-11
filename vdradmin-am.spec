@@ -131,3 +131,92 @@ rm -rf %{buildroot}
 %{_mandir}/man1/vdradmind.pl.1*
 
 
+
+
+%changelog
+* Tue Jul 20 2010 Anssi Hannula <anssi@mandriva.org> 3.6.7-1mdv2011.0
++ Revision: 555080
+- new version
+- drop logdir stuff, now using syslog by default
+- rediff perl workaround patch
+- add fixup patches for logdir and pidfile handling
+- allow settings misc options in sysconfig file
+
+* Sat Jan 02 2010 Frederik Himpe <fhimpe@mandriva.org> 3.6.5-1mdv2010.1
++ Revision: 485241
+- Fix BuildRequires
+- update to new version 3.6.5
+
+* Wed Jul 22 2009 Anssi Hannula <anssi@mandriva.org> 3.6.4-2mdv2010.0
++ Revision: 398488
+- rebuild .mo files in %%build
+- fix %%lang entries of UTF-8 .mo files that caused the files to not be
+  installed when %%_install_langs is set, as it normally is
+- fix /usr/bin/vdradmind not being a symlink
+- fix "service vdradmin stop" for current version; vdradmin-am now uses
+  process name "vdradmind"
+- workaround mdv perl-Locale-gettext bug #52396 causing non-UTF-8 output
+
+* Sat Mar 21 2009 Anssi Hannula <anssi@mandriva.org> 3.6.4-1mdv2009.1
++ Revision: 359927
+- new version
+
+* Tue Jun 03 2008 Anssi Hannula <anssi@mandriva.org> 3.6.1-2mdv2009.0
++ Revision: 214587
+- define %%_localstatedir locally for backportability
+- update URL
+
+  + Pixel <pixel@mandriva.com>
+    - adapt to %%_localstatedir now being /var instead of /var/lib (#22312)
+
+* Thu Mar 06 2008 Anssi Hannula <anssi@mandriva.org> 3.6.1-2mdv2008.1
++ Revision: 181030
+- add requires on perl(Template::Plugin::JavaScript), fixes epgsearch
+  integration (reported by Petri Suvila)
+
+* Fri Feb 29 2008 Anssi Hannula <anssi@mandriva.org> 3.6.1-1mdv2008.1
++ Revision: 176883
+- new version
+
+* Thu Dec 27 2007 Anssi Hannula <anssi@mandriva.org> 3.5.3-2mdv2008.1
++ Revision: 138178
+- use /var/cache/vdradmin as template cache directory and handle it
+  properly (fixes the error "file error - failed to create compiled
+  templates directory")
+
+  + Olivier Blin <oblin@mandriva.com>
+    - restore BuildRoot
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - kill re-definition of %%buildroot on Pixel's request
+
+
+* Thu Mar 01 2007 Anssi Hannula <anssi@mandriva.org> 3.5.3-1mdv2007.0
++ Revision: 130692
+- 3.5.3
+- provide the conversion scripts
+
+* Sat Dec 16 2006 Anssi Hannula <anssi@mandriva.org> 3.5.2-1mdv2007.1
++ Revision: 98210
+- 3.5.2
+
+* Fri Dec 01 2006 Anssi Hannula <anssi@mandriva.org> 3.5.1-1mdv2007.1
++ Revision: 89760
+- 3.5.1
+
+* Mon Nov 27 2006 Anssi Hannula <anssi@mandriva.org> 3.5.0-1mdv2007.1
++ Revision: 87608
+- 3.5.0
+- Import vdradmin-am
+
+* Sat Jul 15 2006 Anssi Hannula <anssi@mandriva.org> 3.4.6-1mdv2007.0
+- 3.4.6
+- fix buildrequires
+
+* Tue Jun 20 2006 Anssi Hannula <anssi@mandriva.org> 3.4.5a-2mdv2007.0
+- use _ prefix for system path macros
+- protect vdradmind.conf, it contains credentials in cleartext
+
+* Sat Jun 03 2006 Anssi Hannula <anssi@mandriva.org> 3.4.5a-1mdv2007.0
+- initial Mandriva release
+

@@ -1,0 +1,14 @@
+
+# VDRAdmin-AM configuration
+
+# The user VDRAdmin-AM runs as.
+# If VDR is installed in the same host, the value in
+# /etc/sysconfig/vdr is used.
+# default: vdr
+# VDR_USER="vdr"
+#
+# Use IPv6 support
+# IPV6=no
+#
+# Extra options for vdradmind
+# VDRADMIND_OPTIONS=""
