@@ -1,0 +1,15 @@
+[Unit]
+Description=Web interface for VDR
+Documentation=man:vdradmind(8)
+Documentation=file:///usr/share/doc/vdradmin-am/INSTALL
+After=vdr.service
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/vdradmin-wrapper.sh
+User=vdradmin
+StandardOutput=syslog
+SyslogLevel=warning
+
+[Install]
+WantedBy=multi-user.target
