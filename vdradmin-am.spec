@@ -1,7 +1,7 @@
 Summary:        Web interface for VDR
 Name:           vdradmin-am
 Version:        3.6.7
-Release:        2
+Release:        3
 Group:          Video
 License:        GPL
 URL:            http://andreas.vdr-developer.org/vdradmin-am/
