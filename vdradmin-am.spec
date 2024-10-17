@@ -4,7 +4,7 @@ Version:        3.6.7
 Release:        3
 Group:          Video
 License:        GPL
-URL:            http://andreas.vdr-developer.org/vdradmin-am/
+URL:            https://andreas.vdr-developer.org/vdradmin-am/
 Source:         http://andreas.vdr-developer.org/download/%{name}-%{version}.tar.bz2
 Source2:        vdradmin.service
 Source3:        vdradmin.sysconfig
